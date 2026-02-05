@@ -1,0 +1,58 @@
+{% extends 'main.html' %}
+
+{% block title %}Notifications - PhysioConnect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Notifications</h2>
+        {% if can_edit %}
+        <a href="{% url 'notification_create' %}" class="btn btn-primary">
+            <i class="fas fa-bell"></i> Create Notification
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% for notification in notifications %}
+            <div class="card mb-3 {% if notification.is_read %}border-light{% else %}border-primary{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title">{{ notification.title }}</h5>
+                            <p class="card-text">{{ notification.message }}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ notification.created_at|date:"M d, Y H:i" }}
+                                {% if notification.user %}
+                                • For: {{ notification.user.get_full_name|default:notification.user.username }}
+                                {% else %}
+                                • For: All Users
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div class="btn-group">
+                            {% if can_edit %}
+                            <a href="{% url 'notification_update' notification.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit"></i>Edit
+                            </a>
+                            <a href="{% url 'notification_delete' notification.id %}" class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this notification?')">
+                                <i class="fas fa-trash"></i>Delete
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-bell-slash fa-2x mb-3"></i>
+                <h4>No notifications found</h4>
+                <p>You're all caught up! No new notifications at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

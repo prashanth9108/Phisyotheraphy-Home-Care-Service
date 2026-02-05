@@ -1,0 +1,200 @@
+{% extends 'main.html' %}
+
+{% block title %}Services - PhysioConnect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-hand-holding-medical"></i> Our Services</h2>
+            <p class="text-muted mb-0">Professional physiotherapy services delivered to your home</p>
+        </div>
+        {% if can_edit %}
+        <a href="{% url 'add_service' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Service
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Services Grid -->
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card service-card h-100">
+                {% if service.image %}
+                <img src="{{ service.image.url }}" class="card-img-top service-image" alt="{{ service.name }}">
+                {% else %}
+                <div class="service-image-placeholder">
+                    <i class="fas fa-stethoscope fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title text-primary">{{ service.name }}</h5>
+                        <span class="badge bg-success">₹{{ service.price }}</span>
+                    </div>
+                    
+                    <p class="card-text text-muted service-description">{{ service.description|truncatewords:25 }}</p>
+                    
+                    <div class="service-meta">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock"></i><br>
+                                    {{ service.duration }} mins
+                                </small>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-home"></i><br>
+                                    Home Visit
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-transparent">
+                    {% if can_edit %}
+                    <div class="btn-group w-100">
+                        <a href="{% url 'update_service' service.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_service' service.id %}" class="btn btn-outline-danger btn-sm" 
+                           onclick="return confirm('Are you sure you want to delete this service?')">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center">
+                        <a href="{% url 'book_appointment' %}?service={{ service.id }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-calendar-check"></i> Book Now
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center py-5">
+                <i class="fas fa-hand-holding-medical fa-3x mb-3 text-muted"></i>
+                <h4>No Services Available</h4>
+                <p class="mb-3">We're currently updating our service offerings. Please check back soon!</p>
+                {% if can_edit %}
+                <a href="{% url 'add_service' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add First Service
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Quick Stats Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <h4 class="text-primary mb-1">{{ services|length }}</h4>
+                            <small class="text-muted">Total Services</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h4 class="text-success mb-1">{{ available_services|default:services|length }}</h4>
+                            <small class="text-muted">Available Now</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h4 class="text-info mb-1">24/7</h4>
+                            <small class="text-muted">Support</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h4 class="text-warning mb-1">100%</h4>
+                            <small class="text-muted">Satisfaction</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .service-card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .service-image {
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .service-image-placeholder {
+        height: 200px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .service-description {
+        line-height: 1.6;
+        min-height: 60px;
+    }
+    
+    .service-meta {
+        border-top: 1px solid #e9ecef;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .card-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-group .btn {
+        border-radius: 0.375rem;
+    }
+</style>
+
+<script>
+    // Add hover effects and animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceCards = document.querySelectorAll('.service-card');
+        
+        serviceCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Add loading animation
+        const images = document.querySelectorAll('.service-image');
+        images.forEach(img => {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease';
+        });
+    });
+</script>
+{% endblock %}

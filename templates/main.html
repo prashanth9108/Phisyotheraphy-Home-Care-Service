@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhysioCare</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Static CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    {% include 'nav.html' %}
+
+<div class="container mt-3">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info fade show auto-dismiss" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <center>
+        {% block content %}{% endblock %}   
+    </center>
+</div>
+
+
+<!-- ✅ Auto-hide messages script -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const alerts = document.querySelectorAll('.auto-dismiss');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+        },3000); // 5 seconds
+    });
+});
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Clinic Branches</h2>
+        <a href="{% url 'branch_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Branch
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clinic-medical"></i> Branch Locations
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if branches %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Branch Name</th>
+                                    <th>Location</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for branch in branches %}
+                                <tr>
+                                    <td>
+                                        <strong class="d-block">{{ branch.name }}</strong>
+                                        {% if branch.description %}
+                                        <small class="text-muted">{{ branch.description|truncatewords:5 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-map-marker-alt text-danger"></i>
+                                        {{ branch.location }}
+                                        {% if branch.city %}
+                                        <br><small class="text-muted">{{ branch.city }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if branch.phone %}
+                                        <div class="mb-1">
+                                            <i class="fas fa-phone text-primary"></i>
+                                            <small>{{ branch.phone }}</small>
+                                        </div>
+                                        {% endif %}
+                                        {% if branch.email %}
+                                        <div>
+                                            <i class="fas fa-envelope text-primary"></i>
+                                            <small>{{ branch.email }}</small>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if branch.is_active %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'branch_update' branch.pk %}" class="btn btn-outline-primary"
+                                               title="Edit Branch">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                            <a href="{% url 'branch_delete' branch.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this branch?')"
+                                               title="Delete Branch">
+                                                <i class="fas fa-trash"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-clinic-medical fa-2x mb-3"></i>
+                        <h4>No clinic branches found</h4>
+                        <p>No clinic branches have been added yet.</p>
+                        <a href="{% url 'branch_create' %}" class="btn btn-primary mt-2">
+                            Add First Branch
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

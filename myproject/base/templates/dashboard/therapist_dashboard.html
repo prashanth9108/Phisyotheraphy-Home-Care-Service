@@ -1,0 +1,108 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold">Therapist Dashboard</h3>
+            <p class="text-muted mb-0">Manage your appointments and treatment plans</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+            <a class="btn btn-outline-primary" href="{% url 'service_list' %}">
+                <i class="bi bi-briefcase-medical me-1"></i> Services
+            </a>
+            <a class="btn btn-outline-primary" href="{% url 'exercise_list' %}">
+                <i class="bi bi-heart-pulse me-1"></i> Exercises
+            </a>
+            <a class="btn btn-primary" href="{% url 'treatment_plan_list' %}">
+                <i class="bi bi-file-medical me-1"></i> Treatment Plans
+            </a>
+        </div>
+    </div>
+
+    <!-- Appointments -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-semibold">Recent Appointments</h5>
+        </div>
+
+        <div class="card-body p-0">
+            {% if appointments %}
+            <div class="list-group list-group-flush">
+
+                {% for a in appointments %}
+                <div class="list-group-item appointment-item">
+                    <div class="row align-items-center">
+
+                        <!-- Patient -->
+                        <div class="col-md-3">
+                            <h6 class="mb-1 fw-semibold">
+                                {{ a.patient.get_full_name|default:a.patient.username }}
+                            </h6>
+                            <small class="text-muted">Patient</small>
+                        </div>
+
+                        <!-- Service -->
+                        <div class="col-md-3 mt-2 mt-md-0">
+                            <p class="mb-1">{{ a.service.name }}</p>
+                            <small class="text-muted">Service</small>
+                        </div>
+
+                        <!-- Date & Time -->
+                        <div class="col-md-3 mt-2 mt-md-0">
+                            <p class="mb-0 text-muted small">
+                                <i class="bi bi-calendar-event me-1"></i>{{ a.scheduled_date }}<br>
+                                <i class="bi bi-clock me-1"></i>{{ a.scheduled_time }}
+                            </p>
+                        </div>
+
+                        <!-- Action / Status -->
+                        <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                            {% if a.status == 'completed' %}
+                            <a class="btn btn-sm btn-success"
+                               href="{% url 'treatment_plan_create_for_appointment' a.id %}">
+                                <i class="bi bi-file-earmark-plus me-1"></i> Create Plan
+                            </a>
+                            {% else %}
+                            <span class="badge bg-secondary">
+                                {{ a.status|title }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+            {% else %}
+
+            <!-- Empty State -->
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-x display-5 text-muted mb-3"></i>
+                <h5 class="text-muted">No appointments assigned</h5>
+                <p class="text-muted">You currently have no scheduled appointments</p>
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- Custom Styling -->
+<style>
+.appointment-item {
+    padding: 1rem 1.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.appointment-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container text-center mt-5">
+    <h3>Complete Razorpay Payment</h3>
+    <p>Amount: ₹{{ payment.amount }}</p>
+
+    <form action="{{ callback_url }}" method="POST">
+        {% csrf_token %}
+
+        <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            data-key="{{ razorpay_key }}"
+            data-amount="{{ amount }}"
+            data-currency="INR"
+            data-order_id="{{ razorpay_order_id }}"
+            data-buttontext="Pay Now"
+            data-name="PhysioCare"
+            data-description="Appointment Payment"
+            data-theme.color="#528FF0">
+        </script>
+    </form>
+
+    <a href="{% url 'payment_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+</div>
+
+{% endblock %}

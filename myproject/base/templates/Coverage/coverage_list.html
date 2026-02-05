@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Service Areas</h2>
+        <a href="{% url 'coverage_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Coverage Area
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-map-marker-alt"></i> Coverage Areas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if coverage_areas %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for area in coverage_areas %}
+                                <tr>
+                                    <td>{{ area.location }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'coverage_update' area.pk %}" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="{% url 'coverage_delete' area.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this coverage area?')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
+                        <h4>No coverage areas found</h4>
+                        <p>No service coverage areas have been added yet.</p>
+                        <a href="{% url 'coverage_create' %}" class="btn btn-primary mt-2">
+                            Add First Coverage Area
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

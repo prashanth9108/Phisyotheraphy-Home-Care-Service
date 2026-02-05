@@ -1,0 +1,104 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Therapist Leaves</h2>
+        <a href="{% url 'leave_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Leave
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calendar-times"></i> Leave Records
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if leaves %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Therapist</th>
+                                    <th>Leave Period</th>
+                                    <th>Duration</th>
+                                    <th>Type</th>
+                                    <th>Reason</th>
+                                    <!-- <th>Actions</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for leave in leaves %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ leave.therapist.get_full_name|default:leave.therapist.username }}</strong>
+                                    </td>
+                                    <td>
+                                        {{ leave.start_date|date:"M d, Y" }} 
+                                        <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                        {{ leave.end_date|date:"M d, Y" }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ leave.duration_days }} day{{ leave.duration_days|pluralize }}</span>
+                                    </td>
+                                    <td>
+                                        {% if leave.leave_type == 'sick' %}
+                                            <span class="badge bg-danger">Sick Leave</span>
+                                        {% elif leave.leave_type == 'vacation' %}
+                                            <span class="badge bg-success">Vacation</span>
+                                        {% elif leave.leave_type == 'personal' %}
+                                            <span class="badge bg-warning">Personal</span>
+                                        {% elif leave.leave_type == 'emergency' %}
+                                            <span class="badge bg-dark">Emergency</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ leave.leave_type }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if leave.status == 'approved' %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% elif leave.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif leave.status == 'rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ leave.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <!-- <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'leave_update' leave.pk %}" class="btn btn-outline-primary"
+                                               title="Edit Leave">
+                                                <i class="fas fa-edit">Edit</i>
+                                            </a>
+                                            <a href="{% url 'leave_delete' leave.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this leave record?')"
+                                               title="Delete Leave">
+                                                <i class="fas fa-trash">Delete</i>
+                                            </a> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-calendar-times fa-2x mb-3"></i>
+                        <h4>No leave records found</h4>
+                        <p>No therapist leaves have been recorded yet.</p>
+                        <a href="{% url 'leave_create' %}" class="btn btn-primary mt-2">
+                            Add First Leave Record
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

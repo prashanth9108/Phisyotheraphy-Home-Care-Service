@@ -1,0 +1,90 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Treatment Plan Details</h1>
+        <div>
+            <a href="{% url 'treatment_plan_list' %}" class="btn btn-secondary">Back to List</a>
+            {% if request.user.role in 'admin,therapist' and treatment_plan.prescribed_by == request.user or request.user.role == 'admin' %}
+            <a href="{% url 'treatment_plan_update' %}" class="btn btn-warning">Edit</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Plan Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Patient:</strong> {{ treatment_plan.appointment.patient.get_full_name|default:treatment_plan.appointment.patient.username }}</p>
+                    <p><strong>Therapist:</strong> {{ treatment_plan.prescribed_by.get_full_name|default:treatment_plan.prescribed_by.username }}</p>
+                    <p><strong>Service:</strong> {{ treatment_plan.appointment.service.name }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Appointment Date:</strong> {{ treatment_plan.appointment.appointment_date }}</p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge {% if treatment_plan.status == 'active' %}bg-success{% elif treatment_plan.status == 'completed' %}bg-primary{% else %}bg-secondary{% endif %}">
+                            {{ treatment_plan.status|title }}
+                        </span>
+                    </p>
+                    <p><strong>Follow Up Required:</strong> 
+                        {% if treatment_plan.follow_up_required %}
+                        <span class="badge bg-warning">Yes</span>
+                        {% else %}
+                        <span class="badge bg-secondary">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Exercises</h5>
+        </div>
+        <div class="card-body">
+            {% if treatment_plan.exercises_list %}
+            <div class="bg-light p-3 rounded">
+                {{ treatment_plan.exercises_list|linebreaks }}
+            </div>
+            {% else %}
+            <p class="text-muted">No exercises prescribed.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Additional Instructions</h5>
+        </div>
+        <div class="card-body">
+            {% if treatment_plan.instructions %}
+            <div class="bg-light p-3 rounded">
+                {{ treatment_plan.instructions|linebreaks }}
+            </div>
+            {% else %}
+            <p class="text-muted">No additional instructions.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Plan Metadata</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Created:</strong> {{ treatment_plan.created_at|date:"M d, Y H:i" }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Last Updated:</strong> {{ treatment_plan.updated_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

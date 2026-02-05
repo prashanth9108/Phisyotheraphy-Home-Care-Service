@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Create Payment</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Proceed to Pay</button>
+        <a href="{% url 'payment_list' %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}

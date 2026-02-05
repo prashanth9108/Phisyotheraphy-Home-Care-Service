@@ -1,0 +1,277 @@
+<nav class="navbar">
+    <div class="nav-container">
+        
+
+        <ul class="nav-links">
+            {% if request.user.is_authenticated %}
+
+                <li><a href="{% url 'dashboard' %}" class="active-link">Dashboard</a></li>
+
+                <li class="dropdown">
+                    <a href="#">Appointments ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'book_appointment' %}">Book Appointment</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">Features ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'notification_list' %}">Notifications</a></li>
+                        <li><a href="{% url 'availability_slot_list' %}">Availability</a></li>
+                        <li><a href="{% url 'coverage_list' %}">Coverage</a></li>
+                        <li><a href="{% url 'payment_list' %}">Payments</a></li>
+                        <li><a href="{% url 'coupon_list' %}">Coupons</a></li>
+                        <li><a href="{% url 'emergency_list' %}">Emergency</a></li>
+                        <li><a href="{% url 'chat_list' %}">Chat Messages</a></li>
+                        <li><a href="{% url 'ticket_list' %}">Support Tickets</a></li>
+                        <li><a href="{% url 'leave_list' %}">Therapist Leaves</a></li>
+                        <li><a href="{% url 'reminder_list' %}">Reminders</a></li>
+                        <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                        <li><a href="{% url 'faq_list' %}">FAQs</a></li>
+                        <li><a href="{% url 'branch_list' %}">Branches</a></li>
+                        <li><a href="{% url 'subscription_list' %}">Subscriptions</a></li>
+                        <li><a href="{% url 'transaction_list' %}">Transactions</a></li>
+                        <li><a href="{% url 'analytics_list' %}">Analytics</a></li>
+                        <li><a href="{% url 'recovery_list' %}">Recovery Predictor</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="{% url 'logout' %}" class="logout-btn">Logout</a></li>
+</ul>
+            {% else %}
+                <li><a href="{% url 'login' %}" class="active-link">Login</a></li>
+                <li><a href="{% url 'register' %}" class="active-link">Register</a></li>
+                
+            {% endif %}
+
+            <!-- <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+                    <span id="theme-icon">🌕</span>
+            </button> -->
+        
+    </div>
+</nav>
+
+
+
+<script>
+    const themeToggle = document.getElementById("theme-toggle");
+const body = document.body;
+
+if (localStorage.getItem("theme") === "dark") {
+    body.classList.add("dark-theme");
+} else {
+    body.classList.add("light-theme");
+}
+
+themeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark-theme");
+    body.classList.toggle("light-theme");
+
+    localStorage.setItem(
+        "theme",
+        body.classList.contains("dark-theme") ? "dark" : "light"
+    );
+});
+
+</script>
+
+<style>
+    /* 🌟 Professional Physiotherapy UI - Navbar & Theme Styles */
+
+/* Variables */
+:root {
+    --primary-color: #0084ff;
+    --gradient: linear-gradient(135deg, #0084ff, #3cc8ff);
+    --bg-light: #ffffff;
+    --bg-dark: #0b0e12;
+    --text-light: #fff;
+    --text-dark: #222;
+
+    --nav-bg-light: rgba(255, 255, 255, 0.85);
+    --nav-bg-dark: rgba(20, 20, 20, 0.85);
+
+    --hover-light: #e7f3ff;
+    --hover-dark: #1f2a37;
+
+    --blur-bg: blur(10px);
+}
+
+/* Themes */
+body.light-theme { background: var(--bg-light); color: var(--text-dark); }
+body.dark-theme { background: var(--bg-dark); color: var(--text-light); }
+
+/* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--nav-bg-light);
+    backdrop-filter: var(--blur-bg);
+    -webkit-backdrop-filter: var(--blur-bg);
+    padding: 14px 28px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    animation: navbarDrop 0.7s ease;
+}
+
+body.dark-theme .navbar {
+    background: var(--nav-bg-dark);
+}
+
+@keyframes navbarDrop {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.nav-logo {
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-decoration: none;
+    background: var(--gradient);
+    background: linear-gradient(135deg, #0084ff, #42d0ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+
+}
+
+/* Links */
+.nav-links {
+    display: flex;
+    gap: 18px;
+    list-style: none;
+    align-items: center;
+}
+
+/* Smooth underline hover */
+.nav-links a {
+    text-decoration: none;
+    position: relative;
+    padding: 8px 12px;
+    transition: 0.3s ease;
+}
+
+/* Underline effect */
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0%;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.3s ease-in-out;
+}
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Active link */
+.active-link {
+    background: var(--gradient);
+    color: #fff !important;
+    border-radius: 6px;
+    padding: 8px 14px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    min-width: 200px;
+    padding: 12px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: var(--blur-bg);
+    border-radius: 10px;
+    animation: menuPop 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.14);
+}
+body.dark-theme .dropdown-menu {
+    background: rgba(30,30,30,0.95);
+}
+.dropdown:hover .dropdown-menu { display: flex; }
+
+.dropdown-menu a {
+    padding: 10px 14px;
+    transition: 0.3s;
+}
+.dropdown-menu a:hover {
+    background: var(--hover-light);
+    border-radius: 6px;
+    transform: translateX(4px);
+}
+body.dark-theme .dropdown-menu a:hover {
+    background: var(--hover-dark);
+}
+
+@keyframes menuPop {
+    from { transform: translateY(12px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Logout */
+.logout-btn {
+    background: crimson;
+    color: white !important;
+    border-radius: 6px;
+}
+
+/* Mobile Menu */
+#menu-toggle { display: none; }
+.menu-icon {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+}
+.menu-icon:hover {
+    transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    .menu-icon { display: block; }
+
+    .nav-links {
+        position: absolute;
+        right: 10px;
+        top: 70px;
+        width: 250px;
+        flex-direction: column;
+        background: rgba(255,255,255,0.9);
+        padding: 25px;
+        border-radius: 10px;
+        display: none;
+        animation: mobileMenu 0.5s ease;
+        backdrop-filter: var(--blur-bg);
+    }
+
+    body.dark-theme .nav-links {
+        background: rgba(0,0,0,0.8);
+    }
+
+    @keyframes mobileMenu {
+        from { transform: translateX(40px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    #menu-toggle:checked ~ .nav-links { display: flex; }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.6s ease-in-out;
+}
+.theme-toggle:hover {
+    transform: rotateY(180deg);
+}
+
+</style>

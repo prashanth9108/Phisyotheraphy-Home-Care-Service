@@ -1,0 +1,91 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Recovery Predictions</h2>
+        <a href="{% url 'recovery_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Prediction
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-brain"></i> AI Recovery Predictions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if predictions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Model Version</th>
+                                    <th>Input Features</th>
+                                    <th>Predicted Days</th>
+                                    <th>Confidence Score</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in predictions %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-info">v{{ item.model_version }}</span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ item.input_features|truncatechars:80 }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-primary">{{ item.predicted_recovery_days }} days</span>
+                                    </td>
+                                    <td>
+                                        {% if item.confidence_score >= 0.8 %}
+                                            <span class="badge bg-success">{{ item.confidence_score|floatformat:2 }}</span>
+                                        {% elif item.confidence_score >= 0.6 %}
+                                            <span class="badge bg-warning">{{ item.confidence_score|floatformat:2 }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ item.confidence_score|floatformat:2 }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ item.created_at|date:"M d, Y" }}</small>
+                                        <br><small class="text-muted">{{ item.created_at|time:"H:i" }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'recovery_update' item.id %}" class="btn btn-outline-primary"
+                                               title="Edit Prediction">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'recovery_delete' item.id %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this recovery prediction?')"
+                                               title="Delete Prediction">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-brain fa-2x mb-3"></i>
+                        <h4>No recovery predictions found</h4>
+                        <p>No AI recovery predictions have been generated yet.</p>
+                        <a href="{% url 'recovery_create' %}" class="btn btn-primary mt-2">
+                            Generate First Prediction
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

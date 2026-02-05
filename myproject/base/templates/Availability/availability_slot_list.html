@@ -1,0 +1,87 @@
+{% extends 'main.html' %}
+
+{% block title %}Availability Slots - PhysioConnect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Availability Slots</h2>
+        {% if can_edit %}
+        <a href="{% url 'availability_slot_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Slot
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calendar-alt"></i> Available Time Slots
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if slots %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Therapist</th>
+                                    <th>Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Status</th>
+                                    {% if can_edit %}
+                                    <th>Actions</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for slot in slots %}
+                                <tr>
+                                    <td>{{ slot.therapist.get_full_name|default:slot.therapist.username }}</td>
+                                    <td>{{ slot.date }}</td>
+                                    <td>{{ slot.start_time }}</td>
+                                    <td>{{ slot.end_time }}</td>
+                                    <td>
+                                        <span class="badge {% if slot.is_available %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {{ slot.is_available|yesno:"Available,Unavailable" }}
+                                        </span>
+                                    </td>
+                                    {% if can_edit %}
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'availability_slot_update' slot.id %}" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                            <a href="{% url 'availability_slot_delete' slot.id %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this availability slot?')">
+                                                <i class="fas fa-trash"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-calendar-times fa-2x mb-3"></i>
+                        <h4>No availability slots found</h4>
+                        <p>No availability slots have been configured yet.</p>
+                        {% if can_edit %}
+                        <a href="{% url 'availability_slot_create' %}" class="btn btn-primary mt-2">
+                            Create First Slot
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Exercise Details</h2>
+        <a href="{% url 'exercise_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">{{ exercise.name }}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Basic Information</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Name:</th>
+                            <td>{{ exercise.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Difficulty Level:</th>
+                            <td>
+                                <span class="badge bg-{% if exercise.difficulty_level == 'Beginner' %}success{% elif exercise.difficulty_level == 'Intermediate' %}warning{% else %}danger{% endif %}">
+                                    {{ exercise.difficulty_level|default:"Not specified" }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Focus Area:</th>
+                            <td>{{ exercise.focus_area|default:"Not specified" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Repetition Count:</th>
+                            <td>{{ exercise.repetition_count }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h5>Additional Details</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Description:</th>
+                            <td>{{ exercise.description|linebreaks|default:"No description provided" }}</td>
+                        </tr>
+                        {% if exercise.demo_video_url %}
+                        <tr>
+                            <th>Demo Video:</th>
+                            <td>
+                                <a href="{{ demo_video_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    Watch Demo Video
+                                </a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                {% if user_role == "Admin" or user_role == "Therapist" %}
+                    <div class="btn-group">
+                        <a href="{% url 'exercise_update' exercise.id %}" class="btn btn-warning">Edit Exercise</a>
+                        <a href="{% url 'exercise_delete' exercise.id %}" class="btn btn-danger">Delete Exercise</a>
+                        <a href="{% url 'exercise_list' %}" class="btn btn-secondary">Back to List</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'exercise_list' %}" class="btn btn-secondary">Back to List</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Emergency Requests</h2>
+        <a href="{% url 'emergency_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Emergency Request
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> Emergency Requests
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if emergencies %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for emergency in emergencies %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ emergency.title }}</strong>
+                                        {% if emergency.description %}
+                                        <br><small class="text-muted">{{ emergency.description|truncatewords:10 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if emergency.priority == 'high' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif emergency.priority == 'medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-info">Low</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if emergency.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif emergency.status == 'in_progress' %}
+                                            <span class="badge bg-primary">In Progress</span>
+                                        {% elif emergency.status == 'resolved' %}
+                                            <span class="badge bg-success">Resolved</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ emergency.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ emergency.created_at|date:"M d, Y" }}</small>
+                                        <br><small class="text-muted">{{ emergency.created_at|time }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'emergency_update' emergency.pk %}" class="btn btn-outline-primary"
+                                               title="Edit Emergency">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="{% url 'emergency_delete' emergency.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this emergency request?')"
+                                               title="Delete Emergency">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                        <h4>No emergency requests found</h4>
+                        <p>No emergency requests have been created yet.</p>
+                        <a href="{% url 'emergency_create' %}" class="btn btn-primary mt-2">
+                            Create First Emergency Request
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

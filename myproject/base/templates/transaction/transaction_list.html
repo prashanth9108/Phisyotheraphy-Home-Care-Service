@@ -1,0 +1,118 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Transaction History</h2>
+        <a href="{% url 'transaction_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Transaction
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exchange-alt"></i> All Transactions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if transactions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Started</th>
+                                    <th>Completed</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in transactions %}
+                                <tr>
+                                    <td>
+                                        <strong>#{{ t.id }}</strong>
+                                    </td>
+                                    <td>
+                                        {{ t.user.get_full_name|default:t.user.username }}
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold {% if t.amount >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                            ${{ t.amount|floatformat:2 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if t.transaction_type == 'payment' %}
+                                            <span class="badge bg-success">Payment</span>
+                                        {% elif t.transaction_type == 'refund' %}
+                                            <span class="badge bg-warning">Refund</span>
+                                        {% elif t.transaction_type == 'withdrawal' %}
+                                            <span class="badge bg-info">Withdrawal</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ t.transaction_type }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if t.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% elif t.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif t.status == 'failed' %}
+                                            <span class="badge bg-danger">Failed</span>
+                                        {% elif t.status == 'cancelled' %}
+                                            <span class="badge bg-secondary">Cancelled</span>
+                                        {% else %}
+                                            <span class="badge bg-info">{{ t.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ t.started_at|date:"M d, Y" }}</small>
+                                        <br><small class="text-muted">{{ t.started_at|time:"H:i" }}</small>
+                                    </td>
+                                    <td>
+                                        {% if t.completed_at %}
+                                            <small>{{ t.completed_at|date:"M d, Y" }}</small>
+                                            <br><small class="text-muted">{{ t.completed_at|time:"H:i" }}</small>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'transaction_update' t.id %}" class="btn btn-outline-primary"
+                                               title="Edit Transaction">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'transaction_delete' t.id %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this transaction?')"
+                                               title="Delete Transaction">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-exchange-alt fa-2x mb-3"></i>
+                        <h4>No transactions found</h4>
+                        <p>No transaction records have been created yet.</p>
+                        <a href="{% url 'transaction_create' %}" class="btn btn-primary mt-2">
+                            Create First Transaction
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

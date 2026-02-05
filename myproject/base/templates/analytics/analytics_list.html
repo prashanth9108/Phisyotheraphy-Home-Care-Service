@@ -1,0 +1,99 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Analytics Reports</h2>
+        <a href="{% url 'analytics_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Report
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-bar"></i> Performance Analytics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if reports %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Therapist</th>
+                                    <th>Total Sessions</th>
+                                    <th>Avg Rating</th>
+                                    <th>Revenue</th>
+                                    <th>Retention Rate</th>
+                                    <th>Popular Services</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in reports %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ r.therapist.get_full_name|default:r.therapist.username }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ r.total_sessions }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-bold me-2">{{ r.avg_rating|floatformat:1 }}</span>
+                                            <div class="text-warning">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">${{ r.revenue_generated|floatformat:2 }}</span>
+                                    </td>
+                                    <td>
+                                        {% if r.patient_retention_rate >= 80 %}
+                                            <span class="badge bg-success">{{ r.patient_retention_rate }}%</span>
+                                        {% elif r.patient_retention_rate >= 60 %}
+                                            <span class="badge bg-warning">{{ r.patient_retention_rate }}%</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ r.patient_retention_rate }}%</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ r.popular_services|truncatewords:3 }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'analytics_update' r.id %}" class="btn btn-outline-primary"
+                                               title="Edit Report">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                            <a href="{% url 'analytics_delete' r.id %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this analytics report?')"
+                                               title="Delete Report">
+                                                <i class="fas fa-trash"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-chart-bar fa-2x mb-3"></i>
+                        <h4>No analytics reports found</h4>
+                        <p>No analytics reports have been generated yet.</p>
+                        <a href="{% url 'analytics_create' %}" class="btn btn-primary mt-2">
+                            Generate First Report
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

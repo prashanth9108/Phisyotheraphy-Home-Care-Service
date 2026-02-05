@@ -1,0 +1,125 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            {% if action == 'create' %}
+                                Create Exercise
+                            {% elif action == 'update' %}
+                                Update Exercise
+                            {% else %}
+                                Delete Exercise
+                            {% endif %}
+                        </h3>
+                        <a href="{% url 'exercise_list' %}" class="btn btn-sm btn-outline-secondary">Back to List</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if action == 'delete' %}
+                        <!-- Delete Confirmation -->
+                        <div class="alert alert-warning">
+                            <h5>Are you sure you want to delete this exercise?</h5>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <p><strong>Exercise Name:</strong> {{ exercise.name }}</p>
+                                    <p><strong>Difficulty Level:</strong> {{ exercise.difficulty_level|default:"Not specified" }}</p>
+                                    <p><strong>Focus Area:</strong> {{ exercise.focus_area|default:"Not specified" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Repetition Count:</strong> {{ exercise.repetition_count }}</p>
+                                    {% if exercise.demo_video_url %}
+                                        <p><strong>Demo Video:</strong> Available</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if exercise.description %}
+                                <p class="mt-3"><strong>Description:</strong> {{ exercise.description|truncatewords:30 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'exercise_list' %}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-danger">Delete Exercise</button>
+                            </div>
+                        </form>
+
+                    {% else %}
+                        <!-- Create/Update Form -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                {% for field in form %}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">
+                                            {{ field.label }}
+                                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <div class="form-text">{{ field.help_text }}</div>
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <div class="alert alert-danger mt-1 p-2">
+                                                {% for error in field.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="{% url 'exercise_list' %}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    {% if action == 'create' %}
+                                        Create Exercise
+                                    {% else %}
+                                        Update Exercise
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add Bootstrap form styling to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (!input.classList.contains('btn')) {
+                input.classList.add('form-control');
+            }
+        });
+    });
+</script>
+{% endblock %}

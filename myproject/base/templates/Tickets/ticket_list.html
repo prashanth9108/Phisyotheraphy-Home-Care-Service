@@ -1,0 +1,105 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Support Tickets</h2>
+        <a href="{% url 'ticket_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Create Ticket
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-life-ring"></i> Support Tickets
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if tickets %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <!-- <th>Updated</th> -->
+                                    <!-- <th>Actions</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ticket in tickets %}
+                                <tr>
+                                    <td>
+                                        <strong class="d-block">{{ ticket.title }}</strong>
+                                        {% if ticket.description %}
+                                        <small class="text-muted">{{ ticket.description|truncatewords:8 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if ticket.priority == 'high' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif ticket.priority == 'medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% elif ticket.priority == 'low' %}
+                                            <span class="badge bg-info">Low</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ ticket.priority }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if ticket.status == 'open' %}
+                                            <span class="badge bg-success">Open</span>
+                                        {% elif ticket.status == 'in_progress' %}
+                                            <span class="badge bg-primary">In Progress</span>
+                                        {% elif ticket.status == 'resolved' %}
+                                            <span class="badge bg-secondary">Resolved</span>
+                                        {% elif ticket.status == 'closed' %}
+                                            <span class="badge bg-dark">Closed</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">{{ ticket.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ ticket.created_at|date:"M d, Y" }}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ ticket.updated_at|date:"M d, Y" }}</small>
+                                    </td>
+                                    <td>
+                                        <!-- <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'ticket_update' ticket.pk %}" class="btn btn-outline-primary"
+                                               title="Edit Ticket">
+                                                <i class="fas fa-edit">Edit</i>
+                                            </a>
+                                            <a href="{% url 'ticket_delete' ticket.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this support ticket?')"
+                                               title="Delete Ticket">
+                                                <i class="fas fa-trash">Delete</i>
+                                            </a>
+                                        </div> -->
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-life-ring fa-2x mb-3"></i>
+                        <h4>No support tickets found</h4>
+                        <p>No support tickets have been created yet.</p>
+                        <a href="{% url 'ticket_create' %}" class="btn btn-primary mt-2">
+                            Create First Ticket
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

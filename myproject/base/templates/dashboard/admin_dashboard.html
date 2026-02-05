@@ -1,0 +1,94 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold">Admin Dashboard</h3>
+            <p class="text-muted mb-0">Overview of system statistics and management</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4">
+
+        <!-- Users Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 dashboard-card">
+                <div class="card-body text-center">
+                    <div class="icon-box bg-primary text-white mb-3">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h6 class="text-muted">Total Users</h6>
+                    <h2 class="fw-bold">{{ users_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 dashboard-card">
+                <div class="card-body text-center">
+                    <div class="icon-box bg-success text-white mb-3">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <h6 class="text-muted">Available Services</h6>
+                    <h2 class="fw-bold">{{ services_count }}</h2>
+                    <a href="{% url 'service_list' %}" class="btn btn-sm btn-outline-success mt-2">
+                        View Services
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 dashboard-card">
+                <div class="card-body text-center">
+                    <div class="icon-box bg-warning text-white mb-3">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <h6 class="text-muted">Appointments</h6>
+                    <h2 class="fw-bold">{{ appointments_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-5">
+        <h5 class="fw-semibold mb-3">Quick Actions</h5>
+        <a href="{% url 'exercise_list' %}" class="btn btn-dark">
+            <i class="bi bi-list-check me-2"></i>View Exercises
+        </a>
+    </div>
+
+</div>
+
+<!-- Custom Styling -->
+<style>
+.dashboard-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin: 0 auto;
+}
+</style>
+
+{% endblock %}

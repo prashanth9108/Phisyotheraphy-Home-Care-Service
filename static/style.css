@@ -1,0 +1,184 @@
+/* analityics_form css */
+
+/* Professional Form Container */
+.container.mt-4 {
+    background: rgba(255, 255, 255, 0.88);
+    padding: 30px;
+    border-radius: 14px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    animation: fadeInPage 0.6s ease-in-out;
+}
+
+body.dark-theme .container.mt-4 {
+    background: rgba(20,20,20,0.92);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+}
+
+/* Page Title */
+.container.mt-4 h2 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #0084ff, #3cc8ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+
+}
+
+/* Form Fields */
+form p {
+    margin-bottom: 18px;
+}
+
+form label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+input, textarea, select {
+    width: 100% !important;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    transition: all 0.25s ease-in-out;
+    font-size: 15px;
+}
+
+/* Dark Mode Form Inputs */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background: #141414;
+    border: 1.5px solid #444;
+    color: #fff;
+}
+
+/* Focus Interaction */
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(0,132,255,0.15);
+    outline: none;
+}
+
+/* Button Styling */
+.btn-success {
+    background: linear-gradient(135deg, #00c853, #00e676);
+    border: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: transform .2s ease;
+}
+
+.btn-secondary {
+    border-radius: 8px;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,200,83,0.3);
+}
+
+/* Button alignment */
+form button,
+form .btn-secondary {
+    margin-top: 10px;
+}
+
+/* Animation */
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* analitics_list */
+/* Page Title */
+.container h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #0066ff, #00eaff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: fadeSlide 0.6s ease-out forwards;
+}
+
+/* Add Report Button */
+.btn-primary {
+    border-radius: 6px;
+    font-weight: 600;
+    transition: transform 0.25s ease, background 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    background-color: #0052cc;
+}
+
+/* Table Design */
+.table {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease-in-out;
+}
+
+.table thead tr {
+    background: #0052cc;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.table tbody tr {
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+/* Row Hover Highlight */
+.table tbody tr:hover {
+    background: #f1f7ff;
+    transform: scale(1.01);
+}
+
+/* Buttons inside table */
+.table .btn-warning,
+.table .btn-danger {
+    font-weight: 600;
+    border-radius: 6px;
+    transition: transform 0.25s ease;
+}
+
+.table .btn-warning:hover,
+.table .btn-danger:hover {
+    transform: translateY(-2px);
+}
+
+/* Empty row style */
+.text-center {
+    font-style: italic;
+    opacity: .7;
+}
+
+/* Keyframe Animations */
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* book appointmenet_css */

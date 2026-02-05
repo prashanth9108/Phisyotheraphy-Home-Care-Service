@@ -1,0 +1,106 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Home Exercise Reminders</h2>
+        <a href="{% url 'reminder_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Reminder
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell"></i> Exercise Reminders
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if reminders %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Patient</th>
+                                    <th>Reminder Time</th>
+                                    <th>Frequency</th>
+                                    <th>Status</th>
+                                    <th>Next Reminder</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reminder in reminders %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ reminder.exercise }}</strong>
+                                        {% if reminder.notes %}
+                                        <br><small class="text-muted">{{ reminder.notes|truncatewords:5 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ reminder.patient.get_full_name|default:reminder.patient.username }}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-clock text-primary"></i>
+                                        {{ reminder.reminder_time|time:"H:i" }}
+                                    </td>
+                                    <td>
+                                        {% if reminder.frequency == 'daily' %}
+                                            <span class="badge bg-success">Daily</span>
+                                        {% elif reminder.frequency == 'weekly' %}
+                                            <span class="badge bg-info">Weekly</span>
+                                        {% elif reminder.frequency == 'custom' %}
+                                            <span class="badge bg-warning">Custom</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ reminder.frequency }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reminder.is_active %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ reminder.next_reminder|date:"M d, Y"|default:"Not scheduled" }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'reminder_update' reminder.pk %}" class="btn btn-outline-primary"
+                                               title="Edit Reminder">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'reminder_delete' reminder.pk %}" class="btn btn-outline-danger"
+                                               onclick="return confirm('Are you sure you want to delete this reminder?')"
+                                               title="Delete Reminder">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-bell fa-2x mb-3"></i>
+                        <h4>No exercise reminders found</h4>
+                        <p>No home exercise reminders have been set up yet.</p>
+                        <a href="{% url 'reminder_create' %}" class="btn btn-primary mt-2">
+                            Create First Reminder
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
